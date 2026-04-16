@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ECommerceMVC.ViewModels.HangHoaVM>
+
+@{
+    ViewData["Title"] = "Shop";
+    Layout = "_DanhSachHangHoa";
+    string tenLoai = ViewData["TenLoaiSp"] as string ?? "Tất cả sản phẩm";
+}
+
+<!-- Single Page Header start -->
+@section BreadCum {
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">Shop</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Pages</a></li>
+            <li class="breadcrumb-item active text-white">Shop</li>
+        </ol>
+    </div>
+}
+<!-- Single Page Header End -->
+
+<!-- Fruits Shop Start-->
+@*Hiển thị số lượng danh sách sản phẩm*@
+<div class="search-results-header mb-4 pb-2 border-bottom border-success">
+    <h2 class="display-5 fw-bold text-dark d-inline-block mb-0">@tenLoai</h2>
+    <span class="ms-3 fs-5 fw-normal text-secondary">
+        (Có <b>@Model.Count()</b> sản phẩm)
+    </span>
+
+</div>
+@await Html.PartialAsync("ProductItem", Model)
+
+<!-- Fruits Shop End-->
+
+<!-- Paging Start-->
+// Lam net prev va next
+@{
+    int prev = ViewBag.Page - 1;
+    if (prev <= 0)
+    {
+        prev = ViewBag.Page;
+    }
+    int next = ViewBag.Page + 1;
+    if (next > ViewBag.NoOfPages)
+    {
+        next = ViewBag.NoOfPages;
+    }
+}
+
+<div class="col-12">
+    <ul class="pagination d-flex justify-content-center mt-5"> 
+        <li class="page-item">
+            <a class="page-link" asp-action="Index" asp-controller="HangHoa" asp-route-page="@prev">Prev</a>
+        </li>
+        @for (int i = 0; i < ViewBag.NoOfPages; i++)
+        {
+            @if (ViewBag.Page == i + 1)
+            {
+                <li class="page-item active">
+                    <a class="page-link" asp-action="Index" asp-controller="HangHoa" asp-route-page="@(i + 1)">@(i + 1)</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-controller="HangHoa" asp-route-page="@(i + 1)">@(i + 1)</a>
+                </li>
+            }
+        }
+        <li class="page-item active">
+            <a class="page-link" asp-action="Index" asp-controller="HangHoa" asp-route-page="@next">Next</a>
+        </li>
+    </ul>
+</div>
+<!-- Paging End-->
